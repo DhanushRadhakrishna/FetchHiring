@@ -10,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fetchhiring.Model.Fetch
 import com.example.fetchhiring.ViewModel.DetailActivity
 import com.example.fetchhiring.ViewModel.MainAdapter
 import com.example.fetchhiring.ViewModel.MainViewModel
+import com.example.fetchhiring.ViewModel.MyViewModelFactory
 import com.example.fetchhiring.databinding.ActivityMainBinding
 
 private lateinit var mainActivityBinding : ActivityMainBinding
@@ -33,18 +35,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel = MainViewModel()
+        viewModel = ViewModelProvider(this,MyViewModelFactory(this)).get(MainViewModel::class.java)
         viewModel.getData()
-//        viewModel.items.observe(this, Observer { newItems ->
-//            Log.i("MainActivity","listIDs = ${viewModel.listID}")
-//            items.clear()
-//            items.addAll(newItems)
-//            listIDs.clear()
-//            listIDs.addAll(viewModel.listID)
-//            mainAdapter.notifyDataSetChanged()
-//            mainActivityBinding.textViewError.visibility = View.GONE
-//
-//        })
+
         viewModel.listIds.observe(this, Observer { newListIds ->
             Log.i("MainActivity","listIDs = ${newListIds}")
             listIDs.clear()
@@ -71,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         mainAdapter = MainAdapter(this, listIDs, object : MainAdapter.ItemClickListener{
             override fun onItemClick(listID: Int) {
                 val intent = Intent(this@MainActivity,DetailActivity::class.java)
-                intent.putExtra("FETCH_ID",listID)
+                intent.putExtra(getString(R.string.fetch_id),listID)
                 startActivity(intent)
             }
 

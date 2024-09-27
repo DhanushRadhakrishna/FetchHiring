@@ -1,5 +1,6 @@
 package com.example.fetchhiring.ViewModel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,9 +10,9 @@ import com.example.fetchhiring.Model.Fetch
 import com.example.fetchhiring.Repository.Repository
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(var context: Context) : ViewModel() {
 
-    val repository = Repository()
+    val repository = Repository.getRepository(context)
     private val _items: MutableLiveData<List<Fetch>> = MutableLiveData()
     val items : LiveData<List<Fetch>>
         get() = _items

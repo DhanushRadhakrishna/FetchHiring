@@ -5,4 +5,7 @@
     <string name="name">Name:</string>
     <string name="list_id">List ID:</string>
     <string name="id">Id:</string>
+    <string name="fetch_id">FETCH_ID</string>
+    <string name="list_id_1">List ID:</string>
+    <string name="id0">ID:</string>
 </resources>
