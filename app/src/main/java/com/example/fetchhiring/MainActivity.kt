@@ -12,15 +12,17 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fetchhiring.Model.Fetch
+import com.example.fetchhiring.ViewModel.DetailActivity
+import com.example.fetchhiring.ViewModel.MainAdapter
 import com.example.fetchhiring.ViewModel.MainViewModel
 import com.example.fetchhiring.databinding.ActivityMainBinding
 
 private lateinit var mainActivityBinding : ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel : MainViewModel
+    private lateinit var mainAdapter: MainAdapter
+    private val listIDs = mutableListOf<Int>()
     private val items = mutableListOf<Fetch>()
-    private lateinit var fetchItemAdapter: FetchItemAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,11 +35,21 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel = MainViewModel()
         viewModel.getData()
-        viewModel.items.observe(this, Observer { newItems ->
-            Log.i("MainActivity","newItems = $newItems")
-            items.clear()
-            items.addAll(newItems)
-            fetchItemAdapter.notifyDataSetChanged()
+//        viewModel.items.observe(this, Observer { newItems ->
+//            Log.i("MainActivity","listIDs = ${viewModel.listID}")
+//            items.clear()
+//            items.addAll(newItems)
+//            listIDs.clear()
+//            listIDs.addAll(viewModel.listID)
+//            mainAdapter.notifyDataSetChanged()
+//            mainActivityBinding.textViewError.visibility = View.GONE
+//
+//        })
+        viewModel.listIds.observe(this, Observer { newListIds ->
+            Log.i("MainActivity","listIDs = ${newListIds}")
+            listIDs.clear()
+            listIDs.addAll(newListIds)
+            mainAdapter.notifyDataSetChanged()
             mainActivityBinding.textViewError.visibility = View.GONE
 
         })
@@ -49,14 +61,23 @@ class MainActivity : AppCompatActivity() {
         viewModel.errorMessage.observe(this, Observer { errorMessage ->
             if (errorMessage != null) {
                 mainActivityBinding.progressBar.visibility = View.GONE
-                mainActivityBinding.textViewError.text = "Error while loading results. Please check your internet connection"
-                Toast.makeText(this, "Error while loading results", Toast.LENGTH_SHORT).show()
+                mainActivityBinding.textViewError.text =
+                    getString(R.string.error_while_loading_results_please_check_your_internet_connection)
+                Toast.makeText(this,
+                    getString(R.string.error_while_loading_results), Toast.LENGTH_SHORT).show()
             }
         })
 //        Log.i("MainActivity","items = $items")
-        fetchItemAdapter = FetchItemAdapter(this, items)
-        mainActivityBinding.itemsRecyclerView.adapter = fetchItemAdapter
-        mainActivityBinding.itemsRecyclerView.layoutManager = LinearLayoutManager(this)
+        mainAdapter = MainAdapter(this, listIDs, object : MainAdapter.ItemClickListener{
+            override fun onItemClick(listID: Int) {
+                val intent = Intent(this@MainActivity,DetailActivity::class.java)
+                intent.putExtra("FETCH_ID",listID)
+                startActivity(intent)
+            }
+
+        })
+        mainActivityBinding.mainRecyclerView.adapter = mainAdapter
+        mainActivityBinding.mainRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
 }

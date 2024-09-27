@@ -24,6 +24,10 @@ class MainViewModel : ViewModel() {
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
+    private var  _listIDs  : MutableLiveData<List<Int> > = MutableLiveData()
+    val listIds : LiveData<List<Int>>
+        get() =  _listIDs
+    var mapOfGroup : Map<Int, List<Fetch>> = mapOf()
     fun getData()
     {
         viewModelScope.launch {
@@ -35,6 +39,11 @@ class MainViewModel : ViewModel() {
                 _errorMessage.value = null
                 _isLoading.value = true
 
+                mapOfGroup = sortedList.groupBy { it.listId }
+                //form a list for only ListID
+                _listIDs.value = mapOfGroup.keys.toList()
+
+                Log.i("MainViewModel","$_listIDs")
             }
             catch (responseError : Exception)
             {

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FetchHiring</string>
+    <string name="error_while_loading_results_please_check_your_internet_connection">Error while loading results. Please check your internet connection</string>
+    <string name="error_while_loading_results">Error while loading results</string>
+    <string name="name">Name:</string>
+    <string name="list_id">List ID:</string>
+    <string name="id">Id:</string>
 </resources>

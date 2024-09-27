@@ -11,9 +11,10 @@ import com.example.fetchhiring.Model.Fetch
 class FetchItemAdapter(private val context : Context, private val items : List<Fetch>) : RecyclerView.Adapter<FetchItemAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textViewListId = itemView.findViewById<TextView>(R.id.textViewListID)
         private val textViewId = itemView.findViewById<TextView>(R.id.textViewId)
-        private val textViewListId = itemView.findViewById<TextView>(R.id.textViewListId)
         private val textViewName = itemView.findViewById<TextView>(R.id.textViewName)
+
 
         fun bind(item: Fetch) {
             textViewId.text = item.id.toString()
